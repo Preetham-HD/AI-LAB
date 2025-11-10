@@ -42,3 +42,31 @@ def unify(x, y, subst=None):
             return subst
 
     elif x == y:
+        return subst
+
+    # Step 2: Predicate symbol mismatch
+    elif isinstance(x, list) and isinstance(y, list):
+        if len(x) != len(y):
+            return None  # FAILURE
+
+        for xi, yi in zip(x, y):
+            subst = unify(xi, yi, subst)
+            if subst is None:
+                return None
+        return subst
+
+    else:
+        return None  # FAILURE
+
+
+if __name__ == "__main__":
+    expr1 = ["Knows", "John", "x"]
+    expr2 = ["Knows", "y", "Mary"]
+
+    result = unify(expr1, expr2)
+    if result:
+        print("Unification successful. Substitution set:")
+        for k, v in result.items():
+            print(f"{k} / {v}")
+    else:
+        print("Unification failed.")
